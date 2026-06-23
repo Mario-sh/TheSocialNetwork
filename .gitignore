@@ -1,0 +1,68 @@
+# ============================
+# Fichiers de configuration sensibles
+# ============================
+api/config.php
+.env
+*.env
+
+# ============================
+# Système d'exploitation
+# ============================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# ============================
+# Éditeurs de code
+# ============================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PHPStorm, WebStorm...)
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ============================
+# PHP
+# ============================
+vendor/
+composer.lock
+
+# Logs PHP
+*.log
+error_log
+
+# ============================
+# MySQL / Base de données
+# ============================
+*.sql.bak
+*.sql.gz
+
+# ============================
+# Uploads utilisateurs
+# ============================
+assets/images/uploads/
+assets/images/profiles/
+
+# ============================
+# Node.js (si utilisé pour le chat)
+# ============================
+node_modules/
+npm-debug.log*
+package-lock.json
