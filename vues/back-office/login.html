@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration — TheSocialNetwork</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: url('../../assets/images/backofficeauthbackground.jpg') center/cover no-repeat;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1877F2;
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background: #1C1E21;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #606770;
+            margin-bottom: 6px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #E4E6EB;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', Arial, sans-serif;
+            outline: none;
+            color: #1C1E21;
+            transition: border 0.15s;
+        }
+
+        .form-group input:focus {
+            border-color: #1877F2;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: #1C1E21;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+            margin-top: 6px;
+            transition: background 0.15s;
+        }
+
+        .btn-login:hover {
+            background: #333;
+        }
+
+        .btn-login:disabled {
+            background: #BCC0C4;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        .message.error {
+            background: #faece7;
+            color: #c0431a;
+            border: 1px solid #f0c8b8;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .back-link a {
+            color: #1877F2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="logo">
+            <h1>TheSocialNetwork</h1>
+            <span class="admin-badge">ADMINISTRATION</span>
+        </div>
+
+        <div class="message error" id="message"></div>
+
+        <div class="form-group">
+            <label>Email administrateur</label>
+            <input type="email" id="email" placeholder="admin@thesocialnetwork.com">
+        </div>
+
+        <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" id="mot_de_passe" placeholder="Votre mot de passe">
+        </div>
+
+        <button class="btn-login" onclick="connecterAdmin()">
+            Se connecter
+        </button>
+
+        <div class="back-link">
+            <a href="../../index.html">Retour au site</a>
+        </div>
+    </div>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+        // Si déjà connecté en admin → dashboard
+        const user = getUser();
+        if (user && (user.role === 'administrateur' || user.role === 'moderateur')) {
+            window.location.href = 'dashboard.html';
+        }
+
+        async function connecterAdmin() {
+            const email = document.getElementById('email').value.trim();
+            const mot_de_passe = document.getElementById('mot_de_passe').value.trim();
+
+            if (!email || !mot_de_passe) {
+                afficherErreur('Email et mot de passe obligatoires');
+                return;
+            }
+
+            const btn = document.querySelector('.btn-login');
+            btn.disabled = true;
+            btn.textContent = 'Connexion...';
+
+            const result = await apiCall('../../api/admin/login_admin.php', 'POST', {
+                email,
+                mot_de_passe
+            });
+
+            if (result.success) {
+                saveToken(result.token);
+                saveUser(result.user);
+                window.location.href = 'dashboard.html';
+            } else {
+                afficherErreur(result.message || 'Accès refusé');
+                btn.disabled = false;
+                btn.textContent = 'Se connecter';
+            }
+        }
+
+        function afficherErreur(texte) {
+            const msg = document.getElementById('message');
+            msg.textContent = texte;
+            msg.style.display = 'block';
+        }
+    </script>
+
+</body>
+
+</html>

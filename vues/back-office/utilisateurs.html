@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utilisateurs — Administration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #F0F2F5;
+            min-height: 100vh;
+            color: #1C1E21;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ── SIDEBAR ─────────────────────────────── */
+        .sidebar {
+            width: 240px;
+            background: #1C1E21;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            padding: 20px 16px;
+            border-bottom: 1px solid #333;
+        }
+
+        .sidebar-logo h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .sidebar-logo span {
+            font-size: 11px;
+            color: #8A8D91;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #8A8D91;
+            transition: background 0.15s, color 0.15s;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: 'Inter', Arial, sans-serif;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-item:hover {
+            background: #333;
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: #1877F2;
+            color: #fff;
+        }
+
+        .sidebar-footer {
+            padding: 16px 8px;
+            border-top: 1px solid #333;
+        }
+
+        .admin-info {
+            padding: 10px 12px;
+            margin-bottom: 8px;
+        }
+
+        .admin-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .admin-role {
+            font-size: 11px;
+            color: #8A8D91;
+            margin-top: 2px;
+        }
+
+        /* ── CONTENU ─────────────────────────────── */
+        .main-content {
+            margin-left: 240px;
+            flex: 1;
+            padding: 24px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1C1E21;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input {
+            background: #fff;
+            border: 1px solid #E4E6EB;
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-size: 14px;
+            font-family: 'Inter', Arial, sans-serif;
+            outline: none;
+            width: 240px;
+            color: #1C1E21;
+        }
+
+        .search-input:focus {
+            border-color: #1877F2;
+        }
+
+        /* ── TABLEAU ─────────────────────────────── */
+        .table-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 12px 20px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #8A8D91;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: #F9FAFB;
+            border-bottom: 1px solid #E4E6EB;
+        }
+
+        td {
+            padding: 14px 20px;
+            font-size: 14px;
+            color: #1C1E21;
+            border-bottom: 1px solid #F0F2F5;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #F9FAFB;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1877F2;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: #8A8D91;
+            margin-top: 1px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background: #EEEDFE;
+            color: #5B4FE8;
+        }
+
+        .badge-modo {
+            background: #E7F3FF;
+            color: #1877F2;
+        }
+
+        .badge-user {
+            background: #F0F2F5;
+            color: #606770;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-supprimer {
+            background: #FFEBE9;
+            color: #C0431A;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+            transition: background 0.15s;
+        }
+
+        .btn-supprimer:hover {
+            background: #FFDAD5;
+        }
+
+        .btn-role {
+            background: #E7F3FF;
+            color: #1877F2;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+            transition: background 0.15s;
+        }
+
+        .btn-role:hover {
+            background: #d0e8ff;
+        }
+
+        /* Masquer bouton role pour modérateurs */
+        .moderateur .btn-role {
+            display: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: #8A8D91;
+            font-size: 14px;
+        }
+
+        /* Modal confirmation */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px;
+            max-width: 380px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .modal p {
+            font-size: 14px;
+            color: #606770;
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+
+        .btn-annuler {
+            background: #E4E6EB;
+            color: #1C1E21;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        .btn-confirmer {
+            background: #C0431A;
+            color: #fff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+                padding: 16px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .search-input {
+                width: 160px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h1>TheSocialNetwork</h1>
+                <span>Administration</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="utilisateurs.html" class="nav-item active">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                    </svg>
+                    Utilisateurs
+                </a>
+                <a href="articles.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                    </svg>
+                    Articles
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="admin-info">
+                    <div class="admin-name" id="admin-name">...</div>
+                    <div class="admin-role" id="admin-role">...</div>
+                </div>
+                <button class="nav-item" onclick="deconnecter()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                    </svg>
+                    Déconnexion
+                </button>
+            </div>
+        </aside>
+
+        <!-- CONTENU -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">Utilisateurs</div>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Rechercher..."
+                        oninput="filtrerUsers(this.value)">
+                </div>
+            </div>
+
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Rôle</th>
+                            <th>Inscrit le</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-users">
+                        <tr>
+                            <td colspan="4" class="empty-state">Chargement...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal confirmation suppression -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <h3>Supprimer cet utilisateur ?</h3>
+            <p>Cette action est irréversible. Toutes ses publications et messages seront supprimés.</p>
+            <div class="modal-actions">
+                <button class="btn-annuler" onclick="fermerModal()">Annuler</button>
+                <button class="btn-confirmer" onclick="confirmerSuppression()">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+        const user = getUser();
+        if (!user || (user.role !== 'administrateur' && user.role !== 'moderateur')) {
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('admin-name').textContent = user.prenom + ' ' + user.nom;
+        document.getElementById('admin-role').textContent = user.role === 'administrateur' ? 'Administrateur' : 'Modérateur';
+
+        let tousLesUsers = [];
+        let userASupprimer = null;
+
+        // ── Charger les utilisateurs ──────────────────────────────
+        async function chargerUsers() {
+            const result = await apiCall('../../api/admin/manage_users.php', 'GET');
+            const tbody = document.getElementById('table-users');
+
+            if (result.success && result.utilisateurs.length > 0) {
+                tousLesUsers = result.utilisateurs;
+                afficherUsers(tousLesUsers);
+            } else {
+                tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Aucun utilisateur.</td></tr>';
+            }
+        }
+
+        // ── Afficher les utilisateurs ─────────────────────────────
+        function afficherUsers(users) {
+            const tbody = document.getElementById('table-users');
+            const isAdmin = user.role === 'administrateur';
+
+            tbody.innerHTML = users.map(u => {
+                const initiale = u.prenom.charAt(0).toUpperCase();
+                const badgeClass = u.role === 'administrateur' ? 'badge-admin' : u.role === 'moderateur' ? 'badge-modo' : 'badge-user';
+
+                const btnRole = isAdmin && u.id !== user.id ? `
+                <button class="btn-role" onclick="changerRole(${u.id}, '${u.role}')">
+                    ${u.role === 'utilisateur' ? 'Promouvoir' : 'Rétrograder'}
+                </button>` : '';
+
+                const btnSuppr = u.id !== user.id ? `
+                <button class="btn-supprimer" onclick="ouvrirModal(${u.id})">
+                    Supprimer
+                </button>` : '';
+
+                return `
+            <tr>
+                <td>
+                    <div class="user-cell">
+                        <div class="user-avatar">${initiale}</div>
+                        <div>
+                            <div class="user-name">${u.prenom} ${u.nom}</div>
+                            <div class="user-email">${u.email}</div>
+                        </div>
+                    </div>
+                </td>
+                <td><span class="badge ${badgeClass}">${u.role}</span></td>
+                <td>${formaterDate(u.cree_le)}</td>
+                <td>
+                    <div class="actions-cell">
+                        ${btnRole}
+                        ${btnSuppr}
+                    </div>
+                </td>
+            </tr>`;
+            }).join('');
+        }
+
+        // ── Filtrer ───────────────────────────────────────────────
+        function filtrerUsers(query) {
+            const q = query.toLowerCase();
+            const filtres = tousLesUsers.filter(u =>
+                u.nom.toLowerCase().includes(q) ||
+                u.prenom.toLowerCase().includes(q) ||
+                u.email.toLowerCase().includes(q)
+            );
+            afficherUsers(filtres);
+        }
+
+        // ── Supprimer ─────────────────────────────────────────────
+        function ouvrirModal(id) {
+            userASupprimer = id;
+            document.getElementById('modal').classList.add('visible');
+        }
+
+        function fermerModal() {
+            userASupprimer = null;
+            document.getElementById('modal').classList.remove('visible');
+        }
+
+        async function confirmerSuppression() {
+            if (!userASupprimer) return;
+            const result = await apiCall('../../api/admin/manage_users.php', 'POST', {
+                action: 'supprimer',
+                user_id: userASupprimer
+            });
+            if (result.success) {
+                fermerModal();
+                chargerUsers();
+            }
+        }
+
+        // ── Changer le rôle ───────────────────────────────────────
+        async function changerRole(user_id, role_actuel) {
+            const nouveau_role = role_actuel === 'utilisateur' ? 'moderateur' : 'utilisateur';
+            const result = await apiCall('../../api/admin/manage_users.php', 'POST', {
+                action: 'changer_role',
+                user_id,
+                role: nouveau_role
+            });
+            if (result.success) chargerUsers();
+        }
+
+        chargerUsers();
+    </script>
+
+</body>
+
+</html>
