@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amis — TheSocialNetwork</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #F0F2F5;
+            min-height: 100vh;
+            color: #1C1E21;
+        }
+
+        /* ── NAVBAR ─────────────────────────────── */
+        .navbar {
+            background: #fff;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1877F2;
+            text-decoration: none;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #606770;
+            transition: background 0.15s;
+        }
+
+        .nav-link:hover {
+            background: #F0F2F5;
+            color: #1877F2;
+        }
+
+        .nav-link.active {
+            color: #1877F2;
+            border-bottom: 3px solid #1877F2;
+            border-radius: 0;
+        }
+
+        .btn-logout {
+            background: #F0F2F5;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #606770;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        .btn-logout:hover {
+            background: #E4E6EB;
+        }
+
+        /* ── CONTENU ─────────────────────────────── */
+        .main {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* ── SECTION TITRE ───────────────────────── */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1C1E21;
+            margin-bottom: 16px;
+        }
+
+        /* ── GRILLE UTILISATEURS ─────────────────── */
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .user-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #1877F2;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1C1E21;
+        }
+
+        /* ── BOUTONS D'ACTION ────────────────────── */
+        .btn-add {
+            background: #E7F3FF;
+            color: #1877F2;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+            width: 100%;
+            transition: background 0.15s;
+        }
+
+        .btn-add:hover {
+            background: #d0e8ff;
+        }
+
+        .btn-ami {
+            background: #E4E6EB;
+            color: #606770;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: default;
+            font-family: 'Inter', Arial, sans-serif;
+            width: 100%;
+        }
+
+        .btn-pending {
+            background: #FFF3E0;
+            color: #E65100;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: default;
+            font-family: 'Inter', Arial, sans-serif;
+            width: 100%;
+        }
+
+        /* ── INVITATIONS REÇUES ──────────────────── */
+        .invitation-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .invitation-info {
+            flex: 1;
+        }
+
+        .invitation-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1C1E21;
+        }
+
+        .invitation-text {
+            font-size: 12px;
+            color: #8A8D91;
+            margin-top: 2px;
+        }
+
+        .invitation-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-accepter {
+            background: #1877F2;
+            color: #fff;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        .btn-refuser {
+            background: #E4E6EB;
+            color: #1C1E21;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        .btn-accepter:hover {
+            background: #166FE5;
+        }
+
+        .btn-refuser:hover {
+            background: #d0d2d6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 32px;
+            color: #8A8D91;
+            font-size: 14px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ── BOTTOM NAV ──────────────────────────── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 1px solid #E4E6EB;
+            justify-content: space-around;
+            align-items: center;
+            height: 56px;
+            z-index: 100;
+            display: none;
+        }
+
+        .bottom-nav a,
+        .bottom-nav button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 500;
+            color: #606770;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+            gap: 2px;
+        }
+
+        .bottom-nav a.active {
+            color: #1877F2;
+        }
+
+        /* ── RESPONSIVE ──────────────────────────── */
+        @media (max-width: 600px) {
+
+            .nav-center,
+            .nav-user-name {
+                display: none;
+            }
+
+            .main {
+                padding: 12px 8px 80px;
+            }
+
+            .bottom-nav {
+                display: flex !important;
+            }
+
+            .users-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .invitation-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="accueil.html" class="logo">TheSocialNetwork</a>
+        <div class="nav-center">
+            <a href="accueil.html" class="nav-link">Accueil</a>
+            <a href="amis.html" class="nav-link active">Amis</a>
+            <a href="profil.html" class="nav-link">Profil</a>
+            <a href="chat.html" class="nav-link">Messages</a>
+        </div>
+        <button class="btn-logout" onclick="deconnecter()">Déconnexion</button>
+    </nav>
+
+    <div class="main">
+
+        <!-- Invitations reçues -->
+        <div id="section-invitations" style="margin-bottom: 28px; display:none;">
+            <div class="section-title">Invitations reçues</div>
+            <div id="liste-invitations"></div>
+        </div>
+
+        <!-- Tous les utilisateurs -->
+        <div class="section-title">Personnes que vous connaissez peut-être</div>
+        <div class="users-grid" id="liste-utilisateurs">
+            <div class="empty-state">Chargement...</div>
+        </div>
+
+        <!-- Mes amis -->
+        <div class="section-title">Mes amis</div>
+        <div class="users-grid" id="liste-amis">
+            <div class="empty-state">Chargement...</div>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="bottom-nav">
+        <a href="accueil.html">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            Accueil
+        </a>
+        <a href="amis.html" class="active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+            </svg>
+            Amis
+        </a>
+        <a href="profil.html">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+            Profil
+        </a>
+        <a href="chat.html">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+            </svg>
+            Messages
+        </a>
+        <button onclick="deconnecter()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+            </svg>
+            Quitter
+        </button>
+    </nav>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+        if (!estConnecte()) {
+            window.location.href = 'login.html';
+        }
+
+        const user = getUser();
+
+        // ── Charger tous les utilisateurs ────────────────────────
+        async function chargerUtilisateurs() {
+            const result = await apiCall('../../api/friends/get_friends.php?type=tous', 'GET');
+            const liste = document.getElementById('liste-utilisateurs');
+
+            if (result.success && result.utilisateurs.length > 0) {
+                liste.innerHTML = result.utilisateurs.map(u => {
+                    const initiale = u.prenom.charAt(0).toUpperCase();
+                    let bouton = '';
+
+                    if (u.statut === 'ami') {
+                        bouton = `<div class="btn-ami">Ami</div>`;
+                    } else if (u.statut === 'en_attente') {
+                        bouton = `<div class="btn-pending">Invitation envoyée</div>`;
+                    } else {
+                        bouton = `<button class="btn-add" onclick="envoyerInvitation(${u.id}, this)">Ajouter</button>`;
+                    }
+
+                    return `
+                <div class="user-card">
+                    <div class="user-avatar">${initiale}</div>
+                    <div class="user-name">${u.prenom} ${u.nom}</div>
+                    ${bouton}
+                </div>`;
+                }).join('');
+            } else {
+                liste.innerHTML = '<div class="empty-state">Aucun utilisateur trouvé.</div>';
+            }
+        }
+
+        // ── Charger mes amis ──────────────────────────────────────
+        async function chargerAmis() {
+            const result = await apiCall('../../api/friends/get_friends.php?type=amis', 'GET');
+            const liste = document.getElementById('liste-amis');
+
+            if (result.success && result.amis.length > 0) {
+                liste.innerHTML = result.amis.map(u => {
+                    const initiale = u.prenom.charAt(0).toUpperCase();
+                    return `
+                <div class="user-card">
+                    <div class="user-avatar">${initiale}</div>
+                    <div class="user-name">${u.prenom} ${u.nom}</div>
+                    <div class="btn-ami">Ami</div>
+                </div>`;
+                }).join('');
+            } else {
+                liste.innerHTML = '<div class="empty-state">Vous n\'avez pas encore d\'amis.</div>';
+            }
+        }
+
+        // ── Charger les invitations reçues ────────────────────────
+        async function chargerInvitations() {
+            const result = await apiCall('../../api/friends/get_friends.php?type=invitations', 'GET');
+
+            if (result.success && result.invitations.length > 0) {
+                const section = document.getElementById('section-invitations');
+                const liste = document.getElementById('liste-invitations');
+                section.style.display = 'block';
+
+                liste.innerHTML = result.invitations.map(inv => {
+                    const initiale = inv.prenom.charAt(0).toUpperCase();
+                    return `
+                <div class="invitation-card" id="inv-${inv.id}">
+                    <div class="user-avatar" style="width:48px;height:48px;font-size:18px">${initiale}</div>
+                    <div class="invitation-info">
+                        <div class="invitation-name">${inv.prenom} ${inv.nom}</div>
+                        <div class="invitation-text">vous a envoyé une invitation</div>
+                    </div>
+                    <div class="invitation-actions">
+                        <button class="btn-accepter" onclick="repondreInvitation(${inv.id}, 'accepte')">Accepter</button>
+                        <button class="btn-refuser"  onclick="repondreInvitation(${inv.id}, 'refuse')">Refuser</button>
+                    </div>
+                </div>`;
+                }).join('');
+            }
+        }
+
+        // ── Envoyer une invitation ────────────────────────────────
+        async function envoyerInvitation(user_id, btn) {
+            btn.disabled = true;
+            btn.textContent = 'Envoi...';
+
+            const result = await apiCall('../../api/friends/send_request.php', 'POST', { user_id });
+
+            if (result.success) {
+                btn.className = 'btn-pending';
+                btn.textContent = 'Invitation envoyée';
+                btn.disabled = true;
+            } else {
+                btn.disabled = false;
+                btn.textContent = 'Ajouter';
+            }
+        }
+
+        // ── Répondre à une invitation ─────────────────────────────
+        async function repondreInvitation(demande_id, statut) {
+            const result = await apiCall('../../api/friends/respond_request.php', 'POST', {
+                demande_id,
+                statut
+            });
+
+            if (result.success) {
+                // Supprime la carte d'invitation
+                document.getElementById('inv-' + demande_id).remove();
+                // Recharge la liste des amis si accepté
+                if (statut === 'accepte') chargerAmis();
+            }
+        }
+
+        // ── Lancement ─────────────────────────────────────────────
+        chargerUtilisateurs();
+        chargerAmis();
+        chargerInvitations();
+    </script>
+
+</body>
+
+</html>

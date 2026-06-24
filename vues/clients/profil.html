@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil — TheSocialNetwork</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #F0F2F5;
+            min-height: 100vh;
+            color: #1C1E21;
+        }
+
+        /* ── NAVBAR ─────────────────────────────── */
+        .navbar {
+            background: #fff;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1877F2;
+            text-decoration: none;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #606770;
+            transition: background 0.15s;
+        }
+
+        .nav-link:hover {
+            background: #F0F2F5;
+            color: #1877F2;
+        }
+
+        .nav-link.active {
+            color: #1877F2;
+            border-bottom: 3px solid #1877F2;
+            border-radius: 0;
+        }
+
+        .btn-logout {
+            background: #F0F2F5;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #606770;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        .btn-logout:hover {
+            background: #E4E6EB;
+        }
+
+        /* ── CONTENU ─────────────────────────────── */
+        .main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        /* ── CARTE PROFIL ────────────────────────── */
+        .profile-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .profile-cover {
+            height: 140px;
+            background: linear-gradient(135deg, #1877F2, #42a5f5);
+        }
+
+        .profile-info {
+            padding: 0 20px 20px;
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar-wrap {
+            margin-top: -40px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #1877F2;
+            border: 4px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-details {
+            flex: 1;
+            padding-top: 12px;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1C1E21;
+        }
+
+        .profile-email {
+            font-size: 13px;
+            color: #8A8D91;
+            margin-top: 3px;
+        }
+
+        /* ── FORMULAIRE ──────────────────────────── */
+        .form-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .form-card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1C1E21;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #E4E6EB;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #606770;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #E4E6EB;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', Arial, sans-serif;
+            color: #1C1E21;
+            outline: none;
+            transition: border 0.15s;
+            background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #1877F2;
+        }
+
+        .form-group textarea {
+            resize: none;
+            min-height: 80px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 8px;
+            background: #F0F2F5;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: #1877F2;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+            transition: background 0.15s;
+        }
+
+        .btn-save:hover {
+            background: #166FE5;
+        }
+
+        .btn-save:disabled {
+            background: #BCC0C4;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 14px;
+            display: none;
+        }
+
+        .message.success {
+            background: #e1f5ee;
+            color: #0e8a5f;
+            border: 1px solid #b8e8d4;
+        }
+
+        .message.error {
+            background: #faece7;
+            color: #c0431a;
+            border: 1px solid #f0c8b8;
+        }
+
+        /* ── BOTTOM NAV MOBILE ───────────────────── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-top: 1px solid #E4E6EB;
+            justify-content: space-around;
+            align-items: center;
+            height: 56px;
+            z-index: 100;
+            display: none;
+        }
+
+        .bottom-nav a,
+        .bottom-nav button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 500;
+            color: #606770;
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Inter', Arial, sans-serif;
+            gap: 2px;
+        }
+
+        .bottom-nav a.active {
+            color: #1877F2;
+        }
+
+        /* ── RESPONSIVE ──────────────────────────── */
+        @media (max-width: 600px) {
+
+            .nav-center,
+            .nav-user-name {
+                display: none;
+            }
+
+            .main {
+                padding: 12px 8px 80px;
+            }
+
+            .bottom-nav {
+                display: flex !important;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="accueil.html" class="logo">TheSocialNetwork</a>
+        <div class="nav-center">
+            <a href="accueil.html" class="nav-link">Accueil</a>
+            <a href="amis.html" class="nav-link">Amis</a>
+            <a href="profil.html" class="nav-link active">Profil</a>
+            <a href="chat.html" class="nav-link">Messages</a>
+        </div>
+        <button class="btn-logout" onclick="deconnecter()">Déconnexion</button>
+    </nav>
+
+    <div class="main">
+
+        <!-- Carte profil -->
+        <div class="profile-card">
+            <div class="profile-cover"></div>
+            <div class="profile-info">
+                <div class="profile-avatar-wrap">
+                    <div class="profile-avatar" id="profile-avatar">?</div>
+                </div>
+                <div class="profile-details">
+                    <div class="profile-name" id="profile-name">Chargement...</div>
+                    <div class="profile-email" id="profile-email"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modifier les infos -->
+        <div class="form-card">
+            <div class="form-card-title">Informations personnelles</div>
+
+            <div class="message" id="msg-infos"></div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nom</label>
+                    <input type="text" id="nom" placeholder="Votre nom">
+                </div>
+                <div class="form-group">
+                    <label>Prénom</label>
+                    <input type="text" id="prenom" placeholder="Votre prénom">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Bio</label>
+                <textarea id="bio" placeholder="Parlez de vous..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Photo de profil</label>
+                <input type="file" id="photo" accept="image/*">
+            </div>
+
+            <button class="btn-save" onclick="sauvegarderInfos()">
+                Enregistrer
+            </button>
+        </div>
+
+        <!-- Modifier le mot de passe -->
+        <div class="form-card">
+            <div class="form-card-title">Changer le mot de passe</div>
+
+            <div class="message" id="msg-mdp"></div>
+
+            <div class="form-group">
+                <label>Mot de passe actuel</label>
+                <input type="password" id="mdp-actuel" placeholder="Votre mot de passe actuel">
+            </div>
+
+            <div class="form-group">
+                <label>Nouveau mot de passe</label>
+                <input type="password" id="mdp-nouveau" placeholder="Nouveau mot de passe">
+            </div>
+
+            <div class="form-group">
+                <label>Confirmer le mot de passe</label>
+                <input type="password" id="mdp-confirm" placeholder="Confirmer le nouveau mot de passe">
+            </div>
+
+            <button class="btn-save" onclick="changerMotDePasse()">
+                Changer le mot de passe
+            </button>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAV MOBILE -->
+    <nav class="bottom-nav">
+        <a href="accueil.html">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+            </svg>
+            Accueil
+        </a>
+        <a href="amis.html">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+            </svg>
+            Amis
+        </a>
+        <a href="profil.html" class="active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+            Profil
+        </a>
+        <a href="chat.html">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+            </svg>
+            Messages
+        </a>
+        <button onclick="deconnecter()">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                    d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+            </svg>
+            Quitter
+        </button>
+    </nav>
+
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+        if (!estConnecte()) {
+            window.location.href = 'login.html';
+        }
+
+        // Afficher les infos de l'utilisateur connecté
+        const user = getUser();
+        if (user) {
+            document.getElementById('profile-name').textContent = user.prenom + ' ' + user.nom;
+            document.getElementById('profile-email').textContent = user.email;
+            document.getElementById('profile-avatar').textContent = user.prenom.charAt(0).toUpperCase();
+            document.getElementById('nom').value = user.nom;
+            document.getElementById('prenom').value = user.prenom;
+        }
+
+        // ── Sauvegarder les infos ─────────────────────────────────
+        // Cette fonction sera complétée par le Membre 3
+        // Elle appellera api/profile/update_profile.php
+        async function sauvegarderInfos() {
+            const nom = document.getElementById('nom').value.trim();
+            const prenom = document.getElementById('prenom').value.trim();
+            const bio = document.getElementById('bio').value.trim();
+            const photo = document.getElementById('photo').files[0];
+
+            if (!nom || !prenom) {
+                afficherMessage('msg-infos', 'Nom et prénom obligatoires', 'error');
+                return;
+            }
+
+            // FormData pour envoyer texte + image ensemble
+            const formData = new FormData();
+            formData.append('nom', nom);
+            formData.append('prenom', prenom);
+            formData.append('bio', bio);
+            if (photo) formData.append('photo', photo);
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Enregistrement...';
+
+            // Appel direct fetch (pas apiCall car on envoie FormData pas JSON)
+            const response = await fetch('../../api/profile/update_profile.php', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + getToken() },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                afficherMessage('msg-infos', 'Profil mis à jour !', 'success');
+                // Met à jour les infos en sessionStorage
+                const userMaj = { ...user, nom, prenom };
+                saveUser(userMaj);
+                document.getElementById('profile-name').textContent = prenom + ' ' + nom;
+            } else {
+                afficherMessage('msg-infos', result.message || 'Erreur', 'error');
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Enregistrer';
+        }
+
+        // ── Changer le mot de passe ───────────────────────────────
+        async function changerMotDePasse() {
+            const actuel = document.getElementById('mdp-actuel').value.trim();
+            const nouveau = document.getElementById('mdp-nouveau').value.trim();
+            const confirm = document.getElementById('mdp-confirm').value.trim();
+
+            if (!actuel || !nouveau || !confirm) {
+                afficherMessage('msg-mdp', 'Tous les champs sont obligatoires', 'error');
+                return;
+            }
+
+            if (nouveau !== confirm) {
+                afficherMessage('msg-mdp', 'Les mots de passe ne correspondent pas', 'error');
+                return;
+            }
+
+            const result = await apiCall('../../api/profile/update_profile.php', 'POST', {
+                action: 'changer_mdp',
+                mdp_actuel: actuel,
+                mdp_nouveau: nouveau
+            });
+
+            if (result.success) {
+                afficherMessage('msg-mdp', 'Mot de passe changé avec succès !', 'success');
+                document.getElementById('mdp-actuel').value = '';
+                document.getElementById('mdp-nouveau').value = '';
+                document.getElementById('mdp-confirm').value = '';
+            } else {
+                afficherMessage('msg-mdp', result.message || 'Erreur', 'error');
+            }
+        }
+
+        // ── Utilitaire message ────────────────────────────────────
+        function afficherMessage(id, texte, type) {
+            const msg = document.getElementById(id);
+            msg.textContent = texte;
+            msg.className = 'message ' + type;
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 4000);
+        }
+    </script>
+
+</body>
+
+</html>
