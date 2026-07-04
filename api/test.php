@@ -1,8 +1,2 @@
 <?php
-require_once 'config.php';
-echo json_encode(['success' => true, 'message' => 'Connexion BDD OK !']);
-
-
-
-
-?>
+echo password_hash('Test1234!', PASSWORD_BCRYPT);
