@@ -20,7 +20,6 @@
             color: #1C1E21;
         }
 
-        /* ── NAVBAR ─────────────────────────────── */
         .navbar {
             background: #fff;
             height: 56px;
@@ -83,14 +82,12 @@
             background: #E4E6EB;
         }
 
-        /* ── CONTENU ─────────────────────────────── */
         .main {
             max-width: 680px;
             margin: 0 auto;
             padding: 24px 16px;
         }
 
-        /* ── CARTE PROFIL ────────────────────────── */
         .profile-card {
             background: #fff;
             border-radius: 10px;
@@ -155,7 +152,6 @@
             margin-top: 3px;
         }
 
-        /* ── FORMULAIRE ──────────────────────────── */
         .form-card {
             background: #fff;
             border-radius: 10px;
@@ -264,7 +260,6 @@
             border: 1px solid #f0c8b8;
         }
 
-        /* ── BOTTOM NAV MOBILE ───────────────────── */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -299,7 +294,6 @@
             color: #1877F2;
         }
 
-        /* ── RESPONSIVE ──────────────────────────── */
         @media (max-width: 600px) {
 
             .nav-center,
@@ -324,7 +318,6 @@
 
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar">
         <a href="accueil.html" class="logo">TheSocialNetwork</a>
         <div class="nav-center">
@@ -338,7 +331,6 @@
 
     <div class="main">
 
-        <!-- Carte profil -->
         <div class="profile-card">
             <div class="profile-cover"></div>
             <div class="profile-info">
@@ -352,12 +344,9 @@
             </div>
         </div>
 
-        <!-- Modifier les infos -->
         <div class="form-card">
             <div class="form-card-title">Informations personnelles</div>
-
             <div class="message" id="msg-infos"></div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label>Nom</label>
@@ -368,51 +357,41 @@
                     <input type="text" id="prenom" placeholder="Votre prénom">
                 </div>
             </div>
-
             <div class="form-group">
                 <label>Bio</label>
                 <textarea id="bio" placeholder="Parlez de vous..."></textarea>
             </div>
-
             <div class="form-group">
                 <label>Photo de profil</label>
                 <input type="file" id="photo" accept="image/*">
             </div>
-
-            <button class="btn-save" onclick="sauvegarderInfos()">
+            <button class="btn-save" id="btn-save-infos" onclick="sauvegarderInfos()">
                 Enregistrer
             </button>
         </div>
 
-        <!-- Modifier le mot de passe -->
         <div class="form-card">
             <div class="form-card-title">Changer le mot de passe</div>
-
             <div class="message" id="msg-mdp"></div>
-
             <div class="form-group">
                 <label>Mot de passe actuel</label>
                 <input type="password" id="mdp-actuel" placeholder="Votre mot de passe actuel">
             </div>
-
             <div class="form-group">
                 <label>Nouveau mot de passe</label>
                 <input type="password" id="mdp-nouveau" placeholder="Nouveau mot de passe">
             </div>
-
             <div class="form-group">
                 <label>Confirmer le mot de passe</label>
                 <input type="password" id="mdp-confirm" placeholder="Confirmer le nouveau mot de passe">
             </div>
-
-            <button class="btn-save" onclick="changerMotDePasse()">
+            <button class="btn-save" id="btn-save-mdp" onclick="changerMotDePasse()">
                 Changer le mot de passe
             </button>
         </div>
 
     </div>
 
-    <!-- BOTTOM NAV MOBILE -->
     <nav class="bottom-nav">
         <a href="accueil.html">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
@@ -450,12 +429,12 @@
     </nav>
 
     <script src="../../assets/js/utils.js"></script>
+    <script src="../../assets/js/utils.js"></script>
     <script>
         if (!estConnecte()) {
             window.location.href = 'login.html';
         }
 
-        // Afficher les infos de l'utilisateur connecté
         const user = getUser();
         if (user) {
             document.getElementById('profile-name').textContent = user.prenom + ' ' + user.nom;
@@ -463,11 +442,14 @@
             document.getElementById('profile-avatar').textContent = user.prenom.charAt(0).toUpperCase();
             document.getElementById('nom').value = user.nom;
             document.getElementById('prenom').value = user.prenom;
+
+            // Affiche la photo si elle existe
+            if (user.photo) {
+                const avatar = document.getElementById('profile-avatar');
+                avatar.innerHTML = `<img src="../../${user.photo}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            }
         }
 
-        // ── Sauvegarder les infos ─────────────────────────────────
-        // Cette fonction sera complétée par le Membre 3
-        // Elle appellera api/profile/update_profile.php
         async function sauvegarderInfos() {
             const nom = document.getElementById('nom').value.trim();
             const prenom = document.getElementById('prenom').value.trim();
@@ -479,18 +461,16 @@
                 return;
             }
 
-            // FormData pour envoyer texte + image ensemble
             const formData = new FormData();
             formData.append('nom', nom);
             formData.append('prenom', prenom);
             formData.append('bio', bio);
             if (photo) formData.append('photo', photo);
 
-            const btn = event.target;
+            const btn = document.getElementById('btn-save-infos');
             btn.disabled = true;
             btn.textContent = 'Enregistrement...';
 
-            // Appel direct fetch (pas apiCall car on envoie FormData pas JSON)
             const response = await fetch('../../api/profile/update_profile.php', {
                 method: 'POST',
                 headers: { 'Authorization': 'Bearer ' + getToken() },
@@ -501,10 +481,13 @@
 
             if (result.success) {
                 afficherMessage('msg-infos', 'Profil mis à jour !', 'success');
-                // Met à jour les infos en sessionStorage
-                const userMaj = { ...user, nom, prenom };
+                const userMaj = { ...user, nom, prenom, photo: result.photo || user.photo };
                 saveUser(userMaj);
                 document.getElementById('profile-name').textContent = prenom + ' ' + nom;
+                if (result.photo) {
+                    const avatar = document.getElementById('profile-avatar');
+                    avatar.innerHTML = `<img src="../../${result.photo}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                }
             } else {
                 afficherMessage('msg-infos', result.message || 'Erreur', 'error');
             }
@@ -513,7 +496,6 @@
             btn.textContent = 'Enregistrer';
         }
 
-        // ── Changer le mot de passe ───────────────────────────────
         async function changerMotDePasse() {
             const actuel = document.getElementById('mdp-actuel').value.trim();
             const nouveau = document.getElementById('mdp-nouveau').value.trim();
@@ -529,6 +511,10 @@
                 return;
             }
 
+            const btn = document.getElementById('btn-save-mdp');
+            btn.disabled = true;
+            btn.textContent = 'Modification...';
+
             const result = await apiCall('../../api/profile/update_profile.php', 'POST', {
                 action: 'changer_mdp',
                 mdp_actuel: actuel,
@@ -543,9 +529,11 @@
             } else {
                 afficherMessage('msg-mdp', result.message || 'Erreur', 'error');
             }
+
+            btn.disabled = false;
+            btn.textContent = 'Changer le mot de passe';
         }
 
-        // ── Utilitaire message ────────────────────────────────────
         function afficherMessage(id, texte, type) {
             const msg = document.getElementById(id);
             msg.textContent = texte;
