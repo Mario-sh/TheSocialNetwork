@@ -31,7 +31,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
     }
 
     $filename   = 'post_' . $user_id . '_' . time() . '.' . $ext;
-    $upload_dir = '../assets/images/';
+    $upload_dir = '../../assets/images/';
     $image_path = 'assets/images/' . $filename;
 
     move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $filename);
