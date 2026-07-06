@@ -1,10 +1,7 @@
 <?php
-// ============================================================
 // login.php — Connexion d'un utilisateur
-// ============================================================
 // Reçoit : email, mot_de_passe
 // Retourne : { success, token, user } ou { success: false, message }
-// ============================================================
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');

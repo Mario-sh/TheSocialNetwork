@@ -1,12 +1,5 @@
--- ============================================================
 -- SCHÉMA BASE DE DONNÉES — Réseau Social
--- ============================================================
--- Exécuter : mysql -u root -p < database/schema.sql
--- ============================================================
-
-CREATE DATABASE IF NOT EXISTS reseau_social CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE reseau_social;
-
+ -- Exécuter : mysql -u root -p < database/schema.sql
 -- ============================================================
 -- TABLE : utilisateurs
 -- ============================================================

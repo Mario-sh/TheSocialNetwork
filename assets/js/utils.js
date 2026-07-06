@@ -1,9 +1,6 @@
 // ============================================================
 // utils.js — Fonctions utilitaires partagées par tout le groupe
 // ============================================================
-// NE PAS MODIFIER sans en parler au chef de projet
-// ============================================================
-
 
 /**
  * Envoie une requête AJAX vers l'API PHP

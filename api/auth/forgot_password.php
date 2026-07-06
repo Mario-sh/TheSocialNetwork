@@ -1,10 +1,7 @@
 <?php
-// ============================================================
 // forgot_password.php — Mot de passe oublié
-// ============================================================
 // Reçoit : email
 // Retourne : { success: true } ou { success: false, message }
-// ============================================================
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
