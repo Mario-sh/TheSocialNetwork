@@ -217,16 +217,5 @@ https://github.com/Mario-sh/TheSocialNetwork
 
 ---
 
-## Lien Google Classroom
-
-https://classroom.google.com/c/ODY3ODgyODgwMDE0/a/ODY3ODgyNzQxNzk0/details
-
----
-
-## Date limite
-
-28 juin 2026 à 23h59
-
----
 
 *Examen Final — TP Réseau Social Web en PHP et AJAX*
