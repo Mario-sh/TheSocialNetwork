@@ -66,4 +66,4 @@ if (!$user_actuel) {
 
 $user_id = $user_actuel['id'];
 
-// ✅ Le fichier qui a importé auth_check.php peut maintenant continuer
+//Succès Le fichier qui a importé auth_check.php peut maintenant continuer

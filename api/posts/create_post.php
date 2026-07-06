@@ -13,15 +13,18 @@ if (!empty($_POST)) {
     $contenu = trim($donnees['contenu'] ?? '');
 }
 
-if (empty($contenu)) {
-    echo json_encode(['success' => false, 'message' => 'Contenu obligatoire']);
+$a_une_image = isset($_FILES['image']) && $_FILES['image']['error'] === 0;
+
+// Contenu obligatoire seulement si pas d'image
+if (empty($contenu) && !$a_une_image) {
+    echo json_encode(['success' => false, 'message' => 'Ajoutez un texte ou une image']);
     exit;
 }
 
 $image_path = null;
 
 // Upload image si fournie
-if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+if ($a_une_image) {
     $ext     = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
     $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
@@ -31,16 +34,13 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
     }
 
     $filename   = 'post_' . $user_id . '_' . time() . '.' . $ext;
-    $upload_dir = '../assets/images/';
+    $upload_dir = '../../assets/images/';
     $image_path = 'assets/images/' . $filename;
 
     move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $filename);
 }
 
-$stmt = $pdo->prepare("
-    INSERT INTO publications (auteur_id, contenu, image)
-    VALUES (?, ?, ?)
-");
+$stmt = $pdo->prepare("INSERT INTO publications (auteur_id, contenu, image) VALUES (?, ?, ?)");
 $stmt->execute([$user_id, $contenu, $image_path]);
 
 echo json_encode(['success' => true, 'message' => 'Post créé']);

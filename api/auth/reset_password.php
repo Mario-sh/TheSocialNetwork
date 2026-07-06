@@ -1,10 +1,7 @@
 <?php
-// ============================================================
 // reset_password.php — Réinitialisation du mot de passe
-// ============================================================
 // Reçoit : token, mdp_nouveau
 // Retourne : { success: true } ou { success: false, message }
-// ============================================================
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');

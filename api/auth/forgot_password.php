@@ -1,10 +1,7 @@
 <?php
-// ============================================================
 // forgot_password.php — Mot de passe oublié
-// ============================================================
 // Reçoit : email
 // Retourne : { success: true } ou { success: false, message }
-// ============================================================
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -102,7 +99,7 @@ $headers  = "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 $headers .= "From: TheSocialNetwork <noreply@thesocialnetwork.com>\r\n";
 
-$email_envoye = mail($email, $sujet, $corps_email, $headers);
+$email_envoye = @mail($email, $sujet, $corps_email, $headers);
 
 // ── Étape 8 : Retourner la réponse ───────────────────────────
 echo json_encode([

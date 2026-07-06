@@ -1,181 +1,221 @@
-# 📘 Réseau Social Web — Examen Final PHP & AJAX
+# TheSocialNetwork
 
-> Application web de type réseau social inspirée de Facebook.  
-> Développée en PHP natif, JavaScript (Fetch/AJAX) et MySQL.
+> Application web de type réseau social inspirée de Facebook — Examen Final PHP & AJAX
 
----
-
-## 👥 Membres du Groupe
-
-| Membre | Rôle | Modules |
-|--------|------|---------|
-| [Ton Prénom NOM] | Chef de projet | Auth, Infrastructure, BDD |
-| [Prénom NOM] | Développeur Frontend/Backend | Flux articles, Likes, Commentaires |
-| [Prénom NOM] | Développeur Frontend/Backend | Amis, Profil, Chat |
-| [Prénom NOM] | Développeur Backend | Back-office, Dashboard admin |
+![PHP](https://img.shields.io/badge/PHP-natif-777BB4?style=flat-square&logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![AJAX](https://img.shields.io/badge/AJAX-Fetch_API-00D09C?style=flat-square)
 
 ---
 
-## 🏗️ Architecture du Projet
+## Description du projet
+
+**TheSocialNetwork** est une application web full-stack de type réseau social développée en PHP natif, JavaScript (AJAX/Fetch) et MySQL dans le cadre de l'examen final du cours de développement web.
+
+L'application permet aux utilisateurs de s'inscrire, publier des articles, interagir avec d'autres membres via les likes, commentaires et un système de messagerie en temps réel simulé. Un espace d'administration complet est également disponible pour les modérateurs et administrateurs.
+
+---
+
+## Fonctionnalités
+
+### Côté Client
+- **Authentification complète** — Inscription, connexion, mot de passe oublié avec email HTML
+- **Fil d'actualité** — Affichage des publications avec likes, dislikes et commentaires en AJAX
+- **Gestion des amis** — Envoi, réception et gestion des invitations d'amitié
+- **Profil personnel** — Modification des informations et de la photo de profil
+- **Chat en temps réel** — Messagerie instantanée simulée avec rafraîchissement toutes les 3 secondes
+
+### Back-office
+- **Deux rôles** — Administrateur et Modérateur
+- **Dashboard** — Statistiques détaillées (utilisateurs, publications, messages, réactions)
+- **Gestion des utilisateurs** — Consultation, suppression, changement de rôle
+- **Gestion des articles** — Consultation et suppression des publications
+
+---
+
+## Technologies utilisées
+
+| Couche | Technologies |
+|--------|-------------|
+| Frontend | HTML5, CSS3, JavaScript ES6 natif |
+| Requêtes HTTP | Fetch API (AJAX) |
+| Backend | PHP 8 natif |
+| Base de données | MySQL 8 avec PDO |
+| Versioning | Git & GitHub |
+| Serveur local | XAMPP (Apache + MySQL) |
+
+---
+
+## Architecture du projet
 
 ```
-reseau-social/
-│
-├── index.html                  # Point d'entrée unique de l'application
-│
+TheSocialNetwork/
+├── index.html                    # Point d'entrée unique
 ├── assets/
-│   ├── css/
-│   │   └── style.css           # Styles globaux
+│   ├── css/                      # Styles CSS
 │   ├── js/
-│   │   ├── auth.js             # Gestion de l'authentification côté JS
-│   │   ├── posts.js            # Flux articles
-│   │   ├── friends.js          # Gestion des amis
-│   │   ├── chat.js             # Module chat
-│   │   └── utils.js            # Fonctions utilitaires partagées
-│   └── images/                 # Images statiques
-│
+│   │   └── utils.js              # Fonctions JS partagées (apiCall, token, etc.)
+│   └── images/                   # Images et avatars
 ├── vues/
-│   ├── clients/                # Pages accessibles aux utilisateurs
+│   ├── clients/                  # Pages utilisateur
+│   │   ├── login.html
+│   │   ├── register.html
 │   │   ├── accueil.html
-│   │   ├── profil.html
 │   │   ├── amis.html
-│   │   └── chat.html
-│   └── back-office/            # Pages d'administration
+│   │   ├── profil.html
+│   │   ├── chat.html
+│   │   ├── forgot_password.html
+│   │   └── reset_password.html
+│   └── back-office/              # Pages administration
+│       ├── login.html
 │       ├── dashboard.html
 │       ├── utilisateurs.html
 │       └── articles.html
-│
-├── api/                        # Scripts PHP (API REST)
-│   ├── config.php              # Connexion BDD (NE PAS MODIFIER)
-│   ├── auth/
-│   │   ├── register.php
-│   │   ├── login.php
-│   │   └── forgot_password.php
-│   ├── posts/
-│   │   ├── get_posts.php
-│   │   ├── create_post.php
-│   │   ├── like.php
-│   │   └── comment.php
-│   ├── friends/
-│   │   ├── get_friends.php
-│   │   ├── send_request.php
-│   │   └── respond_request.php
-│   ├── chat/
-│   │   ├── get_messages.php
-│   │   └── send_message.php
-│   └── admin/
-│       ├── login_admin.php
-│       ├── get_stats.php
-│       └── manage_users.php
-│
+├── api/
+│   ├── config.php                # Connexion BDD
+│   ├── auth_check.php            # Vérification token
+│   ├── auth/                     # Module authentification
+│   ├── posts/                    # Module publications
+│   ├── friends/                  # Module amis
+│   ├── profile/                  # Module profil
+│   ├── chat/                     # Module messagerie
+│   └── admin/                    # Module administration
 └── database/
-    └── schema.sql              # Script de création de la BDD
+    └── schema.sql                # Structure de la base de données
 ```
 
 ---
 
-## ⚙️ Installation & Configuration
+## Installation & Démarrage
 
 ### Prérequis
-- **WSL Ubuntu** (Linux) ou **XAMPP** (Windows)
-- PHP 8.x
-- MySQL 8.x
-- Navigateur moderne
+- [XAMPP](https://www.apachefriends.org) (Apache + PHP + MySQL)
+- [Git](https://git-scm.com)
 
-### Étape 1 — Cloner le projet
+### Étapes
 
+**1. Cloner le dépôt**
 ```bash
-git clone https://github.com/VOTRE_USERNAME/reseau-social.git
-cd reseau-social
+git clone https://github.com/Mario-sh/TheSocialNetwork.git
+cd TheSocialNetwork
 ```
 
-### Étape 2 — Configurer la base de données
-
-```bash
-# Créer la base de données
-mysql -u root -p < database/schema.sql
+**2. Placer le projet dans htdocs**
+```
+C:\xampp\htdocs\TheSocialNetwork\
 ```
 
-### Étape 3 — Configurer la connexion BDD
+**3. Démarrer XAMPP**
 
-Copier le fichier de config exemple et remplir vos informations :
+Ouvrir XAMPP Control Panel et démarrer **Apache** et **MySQL**.
 
+**4. Configurer la base de données**
+
+- Ouvrir http://localhost/phpmyadmin
+- Créer une base de données nommée `reseau_social`
+- Importer le fichier `database/schema.sql`
+
+**5. Configurer config.php**
 ```bash
-cp api/config.example.php api/config.php
+copy api\config.example.php api\config.php
 ```
 
-Ouvrir `api/config.php` et modifier :
-
+Ouvrir `api/config.php` et renseigner les identifiants MySQL :
 ```php
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'reseau_social');
-define('DB_USER', 'root');       // Votre utilisateur MySQL
-define('DB_PASS', '');           // Votre mot de passe MySQL
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('BASE_URL', 'http://localhost/TheSocialNetwork');
+define('SECRET_KEY', 'votre_cle_secrete');
 ```
 
-### Étape 4 — Lancer le projet
+**6. Lancer l'application**
 
-**Sur WSL Ubuntu :**
-```bash
-sudo service apache2 start
-sudo service mysql start
-# Accéder via : http://localhost
+Ouvrir http://localhost/TheSocialNetwork
+
+---
+
+## Identifiants de test
+
+### Compte Utilisateur
+| Champ | Valeur |
+|-------|--------|
+| Email | `dylan@test.com` |
+| Mot de passe | `Test1234!` |
+
+### Compte Administrateur
+| Champ | Valeur |
+|-------|--------|
+| Email | `admin@test.com` |
+| Mot de passe | `Test1234!` |
+| URL back-office | http://localhost/TheSocialNetwork/vues/back-office/login.html |
+
+### Compte Modérateur
+| Champ | Valeur |
+|-------|--------|
+| Email | `moderateur@test.com` |
+| Mot de passe | `Test1234!` |
+
+---
+
+## Fonctionnement technique
+
+### Authentification sans rechargement
+
+La gestion des sessions est assurée côté JavaScript via `sessionStorage`. À la connexion, le serveur PHP génère un token unique stocké en base de données et retourné au client. Ce token est ensuite envoyé dans le header `Authorization` de chaque requête AJAX.
+
+```
+Utilisateur → login.html → login.php → token → sessionStorage
+Chaque requête → Authorization: Bearer {token} → auth_check.php → $user_id
 ```
 
-**Sur XAMPP (Windows) :**
-- Lancer XAMPP Control Panel
-- Démarrer Apache + MySQL
-- Accéder via : `http://localhost`
+### Architecture API REST
+
+Chaque fonctionnalité dispose de ses propres endpoints PHP qui reçoivent des données JSON et retournent du JSON.
+
+```
+Frontend (HTML/JS)  ←→  API PHP  ←→  MySQL
+     fetch()              PDO
+  sessionStorage         Requêtes préparées
+```
+
+### Chat en temps réel
+
+Le module de chat utilise `setInterval` toutes les **3 secondes** pour interroger le serveur et afficher les nouveaux messages sans recharger la page.
 
 ---
 
-## 🔑 Identifiants de Test
+## Sécurité
 
-> ⚠️ À compléter avant la soumission finale
-
-| Rôle | Email | Mot de passe |
-|------|-------|--------------|
-| Utilisateur client | test@test.com | Test1234! |
-| Modérateur | moderateur@test.com | Modo1234! |
-| Administrateur | admin@test.com | Admin1234! |
+- **Requêtes préparées PDO** — protection contre les injections SQL
+- **`password_hash()` / `password_verify()`** — mots de passe jamais stockés en clair
+- **Tokens d'authentification** — génération avec `bin2hex(random_bytes(32))`
+- **Validation des entrées** — vérification côté PHP avant toute insertion en BDD
+- **Headers CORS** — configurés sur toutes les routes API
 
 ---
 
-## 🌿 Branches Git
+## Membres du groupe
 
-| Branche | Description | Responsable |
-|---------|-------------|-------------|
-| `main` | Code stable, version finale | Chef de projet |
-| `develop` | Branche d'intégration | Chef de projet |
-| `feature/auth` | Authentification | Membre 1 |
-| `feature/posts` | Flux articles | Membre 2 |
-| `feature/friends-chat` | Amis, Profil, Chat | Membre 3 |
-| `feature/backoffice` | Back-office admin | Membre 4 |
+**Groupe N°1**
 
----
-
-## 📋 Avancement des Fonctionnalités
-
-- [ ] Authentification (inscription, connexion, mot de passe oublié)
-- [ ] Flux d'articles (affichage, création, image)
-- [ ] Likes / Dislikes avec persistance
-- [ ] Commentaires en AJAX
-- [ ] Gestion des amis
-- [ ] Profil utilisateur
-- [ ] Module Chat
-- [ ] Back-office Modérateur
-- [ ] Back-office Administrateur
-- [ ] Dashboard statistiques
+| # | Nom & Prénom | Rôle | Module |
+|---|-------------|------|--------|
+| 1 | LOKOSSOU SOTON Mario Miguel Dylane | Chef de projet | Authentification + Infrastructure + Pages HTML |
+| 2 | ZOHOUN Melris | Développeur | Flux d'articles + Likes + Commentaires |
+| 3 | SENOU Michael | Développeur | Gestion des Amis + Chat |
+| 4 | DJESSOU Merlaud | Développeur | Back-office Administration |
+| 5 | DIALLO Abdoulrahmane | Développeur | Profil personnel |
 
 ---
 
-## 🔗 Liens
+## Dépôt GitHub
 
-- **Dépôt GitHub :** [INSÉRER LE LIEN ICI]
-- **Google Classroom :** https://classroom.google.com/c/ODY3ODgyODgwMDE0/a/ODY3ODgyNzQxNzk0/details
+https://github.com/Mario-sh/TheSocialNetwork
 
 ---
 
-## 📅 Date limite
 
-**28 juin 2026 à 23h59**
+*Examen Final — TP Réseau Social Web en PHP et AJAX*

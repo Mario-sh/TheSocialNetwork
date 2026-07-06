@@ -1,10 +1,7 @@
 <?php
-// ============================================================
 // register.php — Inscription d'un nouvel utilisateur
-// ============================================================
 // Reçoit : nom, prenom, email, mot_de_passe
 // Retourne : { success: true } ou { success: false, message: "..." }
-// ============================================================
 
 // Autorise les requêtes venant du frontend
 header('Content-Type: application/json');
