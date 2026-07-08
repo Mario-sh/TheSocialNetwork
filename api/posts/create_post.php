@@ -34,10 +34,13 @@ if ($a_une_image) {
     }
 
     $filename   = 'post_' . $user_id . '_' . time() . '.' . $ext;
-    $upload_dir = '../../assets/images/';
+    $upload_dir = __DIR__ . '/../../assets/images/';
     $image_path = 'assets/images/' . $filename;
 
-    move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $filename);
+    if (!move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $filename)) {
+        echo json_encode(['success' => false, 'message' => 'Échec de l\'upload de l\'image']);
+        exit;
+    }
 }
 
 $stmt = $pdo->prepare("INSERT INTO publications (auteur_id, contenu, image) VALUES (?, ?, ?)");

@@ -630,12 +630,14 @@
 
         function creerPostHTML(post) {
             const initiale = post.prenom.charAt(0).toUpperCase();
-            const imageHTML = post.image ? `<img src="../../${post.image}" class="post-image" alt="">` : '';
+            const imageHTML = post.image
+                ? `<img src="../../${post.image}" class="post-image" alt="" onerror="this.style.display='none'">`
+                : '';
             const aLike = post.mon_reaction === 'like';
             const aDislike = post.mon_reaction === 'dislike';
 
             const avatarHTML = post.photo
-                ? `<img src="../../${post.photo}" class="post-avatar" style="object-fit:cover;border-radius:50%;width:40px;height:40px;" alt="">`
+                ? `<img src="../../${post.photo}" class="post-avatar" style="object-fit:cover;border-radius:50%;width:40px;height:40px;" alt="" onerror="this.outerHTML='<div class=\\'post-avatar\\'>${initiale}</div>'">`
                 : `<div class="post-avatar">${initiale}</div>`;
 
             return `

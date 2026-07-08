@@ -415,25 +415,42 @@
 
             .chat-layout {
                 height: calc(100vh - 56px - 56px);
+                position: relative;
             }
 
+            /* Sur mobile : la sidebar prend tout l'écran par défaut */
             .sidebar {
                 width: 100%;
+                display: flex;        /* visible par défaut sur mobile */
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                z-index: 10;
+            }
+
+            /* Quand une conversation est ouverte, sidebar est cachée */
+            .sidebar.hidden {
                 display: none;
             }
 
-            .sidebar.visible {
+            /* Zone chat prend tout l'écran quand ouverte */
+            .chat-zone {
+                position: absolute;
+                top: 0; left: 0; right: 0; bottom: 0;
+                z-index: 10;
+                display: none;
+            }
+
+            .chat-zone.visible {
                 display: flex;
+            }
+
+            /* Bouton retour visible seulement sur mobile */
+            .btn-back-mobile {
+                display: flex !important;
             }
 
             .bottom-nav {
                 display: flex !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .sidebar {
-                width: 260px;
             }
         }
     </style>
@@ -471,7 +488,7 @@
         </div>
 
         <!-- ZONE CONVERSATION -->
-        <div class="chat-zone">
+        <div class="chat-zone" id="chat-zone">
 
             <!-- Écran vide -->
             <div class="chat-empty" id="chat-empty">
@@ -484,6 +501,8 @@
 
             <!-- Header conversation -->
             <div class="chat-header" id="chat-header">
+                <!-- Bouton retour mobile -->
+                <button class="btn-back-mobile" onclick="retourListe()" style="display:none;background:none;border:none;cursor:pointer;color:#1877F2;padding:4px 8px 4px 0;font-size:22px;line-height:1;" title="Retour">←</button>
                 <div class="chat-header-avatar" id="chat-header-avatar">?</div>
                 <div class="chat-header-name" id="chat-header-name">...</div>
             </div>
@@ -579,7 +598,7 @@
                 </div>`;
                 }).join('');
             } else {
-                liste.innerHTML = '<div style="padding:20px;text-align:center;color:#8A8D91;font-size:13px">Aucune conversation.<br>Recherchez un ami pour commencer.</div>';
+                liste.innerHTML = '<div style="padding:20px;text-align:center;color:#8A8D91;font-size:13px">Aucun ami pour l\'instant.<br>Ajoutez des amis pour commencer à discuter !</div>';
             }
         }
 
@@ -611,8 +630,22 @@
         }
 
         // ── Ouvrir une conversation ───────────────────────────────
+        function retourListe() {
+            if (estMobile()) {
+                document.getElementById('sidebar').classList.remove('hidden');
+                document.getElementById('chat-zone').classList.remove('visible');
+                if (intervalChat) clearInterval(intervalChat);
+            }
+        }
+
         function ouvrirConversation(ami_id, prenom, nom) {
             destinataire = { id: ami_id, prenom, nom };
+
+            // Sur mobile : cacher sidebar, afficher zone chat
+            if (estMobile()) {
+                document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('chat-zone').classList.add('visible');
+            }
 
             // Met à jour le header
             document.getElementById('chat-empty').style.display = 'none';

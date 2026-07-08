@@ -8,7 +8,7 @@ require_once '../auth_check.php';
 $type = $_GET['type'] ?? 'messages';
 
 if ($type === 'conversations') {
-    // Retourne la liste des conversations
+    // Retourne tous les amis acceptés + leur dernier message s'il existe
     $stmt = $pdo->prepare("
         SELECT DISTINCT u.id, u.nom, u.prenom, u.photo,
         (SELECT contenu FROM messages
@@ -18,13 +18,20 @@ if ($type === 'conversations') {
         (SELECT COUNT(*) FROM messages
          WHERE expediteur_id = u.id
          AND destinataire_id = ?
-         AND lu = 0) as non_lus
+         AND lu = 0) as non_lus,
+        (SELECT MAX(cree_le) FROM messages
+         WHERE (expediteur_id = ? AND destinataire_id = u.id)
+         OR (expediteur_id = u.id AND destinataire_id = ?)) as dernier_message_date
         FROM utilisateurs u
-        JOIN messages m ON (m.expediteur_id = u.id OR m.destinataire_id = u.id)
-        WHERE (m.expediteur_id = ? OR m.destinataire_id = ?)
+        JOIN amis a ON (
+            (a.demandeur_id = ? AND a.receveur_id = u.id)
+            OR (a.receveur_id = ? AND a.demandeur_id = u.id)
+        )
+        WHERE a.statut = 'accepte'
         AND u.id != ?
+        ORDER BY dernier_message_date DESC, u.prenom ASC
     ");
-    $stmt->execute([$user_id, $user_id, $user_id, $user_id, $user_id, $user_id]);
+    $stmt->execute([$user_id, $user_id, $user_id, $user_id, $user_id, $user_id, $user_id, $user_id]);
     echo json_encode(['success' => true, 'conversations' => $stmt->fetchAll()]);
 
 } else {

@@ -5,13 +5,15 @@ header('Access-Control-Allow-Origin: *');
 require_once '../config.php';
 require_once '../auth_check.php';
 
-$action = $_POST['action'] ?? 'infos';
+// Détecter l'action : JSON (changer_mdp) ou FormData (infos profil)
+$input_brut = file_get_contents('php://input');
+$donnees_json = json_decode($input_brut, true);
+$action = $donnees_json['action'] ?? $_POST['action'] ?? 'infos';
 
 // ── Changer le mot de passe ───────────────────────────────
 if ($action === 'changer_mdp') {
-    $donnees     = json_decode(file_get_contents('php://input'), true);
-    $mdp_actuel  = trim($donnees['mdp_actuel']  ?? '');
-    $mdp_nouveau = trim($donnees['mdp_nouveau'] ?? '');
+    $mdp_actuel  = trim($donnees_json['mdp_actuel']  ?? '');
+    $mdp_nouveau = trim($donnees_json['mdp_nouveau'] ?? '');
 
     if (empty($mdp_actuel) || empty($mdp_nouveau)) {
         echo json_encode(['success' => false, 'message' => 'Champs obligatoires']);
@@ -59,10 +61,13 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
     }
 
     $filename   = 'avatar_' . $user_id . '_' . time() . '.' . $ext;
-    $upload_dir = '../../assets/images/';
+    $upload_dir = __DIR__ . '/../../assets/images/';
     $photo_path = 'assets/images/' . $filename;
 
-    move_uploaded_file($_FILES['photo']['tmp_name'], $upload_dir . $filename);
+    if (!move_uploaded_file($_FILES['photo']['tmp_name'], $upload_dir . $filename)) {
+        echo json_encode(['success' => false, 'message' => 'Échec de l\'upload de la photo']);
+        exit;
+    }
 }
 
 // Mise à jour en BDD

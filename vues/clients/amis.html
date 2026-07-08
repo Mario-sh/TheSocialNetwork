@@ -418,7 +418,7 @@
                     const initiale = u.prenom.charAt(0).toUpperCase();
                     let bouton = '';
 
-                    if (u.statut === 'ami') {
+                    if (u.statut === 'accepte') {
                         bouton = `<div class="btn-ami">Ami</div>`;
                     } else if (u.statut === 'en_attente') {
                         bouton = `<div class="btn-pending">Invitation envoyée</div>`;
@@ -470,15 +470,15 @@
                 liste.innerHTML = result.invitations.map(inv => {
                     const initiale = inv.prenom.charAt(0).toUpperCase();
                     return `
-                <div class="invitation-card" id="inv-${inv.id}">
+                <div class="invitation-card" id="inv-${inv.invitation_id}">
                     <div class="user-avatar" style="width:48px;height:48px;font-size:18px">${initiale}</div>
                     <div class="invitation-info">
                         <div class="invitation-name">${inv.prenom} ${inv.nom}</div>
                         <div class="invitation-text">vous a envoyé une invitation</div>
                     </div>
                     <div class="invitation-actions">
-                        <button class="btn-accepter" onclick="repondreInvitation(${inv.id}, 'accepte')">Accepter</button>
-                        <button class="btn-refuser"  onclick="repondreInvitation(${inv.id}, 'refuse')">Refuser</button>
+                        <button class="btn-accepter" onclick="repondreInvitation(${inv.invitation_id}, 'accepte')">Accepter</button>
+                        <button class="btn-refuser"  onclick="repondreInvitation(${inv.invitation_id}, 'refuse')">Refuser</button>
                     </div>
                 </div>`;
                 }).join('');
@@ -512,8 +512,11 @@
             if (result.success) {
                 // Supprime la carte d'invitation
                 document.getElementById('inv-' + demande_id).remove();
-                // Recharge la liste des amis si accepté
-                if (statut === 'accepte') chargerAmis();
+                // Recharge la liste des amis et des utilisateurs si accepté
+                if (statut === 'accepte') {
+                    chargerAmis();
+                    chargerUtilisateurs();
+                }
             }
         }
 
