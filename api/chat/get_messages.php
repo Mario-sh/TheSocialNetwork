@@ -1,4 +1,3 @@
-//mise à jour de get_messages
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
