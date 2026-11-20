@@ -205,9 +205,9 @@ Le module de chat utilise `setInterval` toutes les **3 secondes** pour interroge
 |---|-------------|------|--------|
 | 1 | LOKOSSOU SOTON Mario Miguel Dylane | Chef de projet | Authentification + Infrastructure + Pages HTML |
 | 2 | ZOHOUN Melris | Développeur | Flux d'articles + Likes + Commentaires |
-| 3 | SENOU Michael | Développeur | Gestion des Amis + Chat |
-| 4 | DJESSOU Merlaud | Développeur | Back-office Administration |
-| 5 | DIALLO Abdoulrahmane | Développeur | Profil personnel |
+| 3 | SENOU Michael | Développeur | Back-office Administration |
+| 4 | DJESSOU Merlaud | Développeur | Gestion des Amis + Profil + Chat |
+| 5 | DIALLO Abdoulrahmane | Développeur | Support / tests |
 
 ---
 
